@@ -1,6 +1,6 @@
-<div align="center"
+<div align="center">
 
-# Soberity Streak
+# Soberity Streak 🧠
 *Keep and track your (detoxes from) addictions*
 
 ![Soberity Streak][screenshot]
