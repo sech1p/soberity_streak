@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../utils/list.dart';
+
 class AddGoalScreen extends StatefulWidget {
   const AddGoalScreen({super.key});
 
@@ -37,7 +39,7 @@ class _AddGoalScreen extends State<AddGoalScreen> {
   DateTime selectedDate = DateTime.now();
   String _setDate = '';
   String finalValue = '';
-  bool _validationErrorBool = false;
+  bool isProperlyValidated = false;
 
   final TextEditingController _goalController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -55,34 +57,6 @@ class _AddGoalScreen extends State<AddGoalScreen> {
       selectedDate = picked;
       _dateController.text = picked.toString(); // Update the text field
     }
-  }
-
-  List<DropdownMenuItem<String>> get dropdownItems {
-    List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(value: '', child: Text('Select addiction')),
-      const DropdownMenuItem(
-          value: 'My addiction (other)', child: Text('My addiction (other)')),
-      const DropdownMenuItem(value: 'Self-harm', child: Text('Self-harm')),
-      const DropdownMenuItem(value: 'Coffee', child: Text('Coffee')),
-      const DropdownMenuItem(
-          value: 'Energy Drinks', child: Text('Energy Drinks')),
-      const DropdownMenuItem(value: 'Smoking', child: Text('Smoking')),
-      const DropdownMenuItem(value: 'Meds', child: Text('Meds')),
-      const DropdownMenuItem(value: 'Pills', child: Text('Pills')),
-      const DropdownMenuItem(value: 'Weed', child: Text('Weed')),
-      const DropdownMenuItem(
-          value: 'Other drugs...', child: Text('Other drugs...')),
-      const DropdownMenuItem(value: 'Television', child: Text('Television')),
-      const DropdownMenuItem(value: 'Video Games', child: Text('Video Games')),
-      const DropdownMenuItem(value: 'Porn', child: Text('Porn')),
-      const DropdownMenuItem(value: 'Facebook', child: Text('Facebook')),
-      const DropdownMenuItem(value: 'Instagram', child: Text('Instagram')),
-      const DropdownMenuItem(value: 'YouTube', child: Text('YouTube')),
-      const DropdownMenuItem(value: 'TikTok', child: Text('TikTok')),
-      const DropdownMenuItem(value: 'Meat', child: Text('Meat')),
-      const DropdownMenuItem(value: 'Sugar', child: Text('Sugar')),
-    ];
-    return menuItems;
   }
 
   @override
@@ -158,7 +132,7 @@ class _AddGoalScreen extends State<AddGoalScreen> {
                   }),
           const SizedBox(height: 100),
           ElevatedButton(
-            autofocus: _validationErrorBool = false,
+            autofocus: isProperlyValidated = false,
             onPressed: () async {
               // Goal name
               if (_goalController.text.isEmpty) {
@@ -167,7 +141,7 @@ class _AddGoalScreen extends State<AddGoalScreen> {
                     content: Text('Goal name cannot be empty'),
                   ),
                 );
-                _validationErrorBool = true;
+                isProperlyValidated = true;
               }
 
               // Date
@@ -180,13 +154,13 @@ class _AddGoalScreen extends State<AddGoalScreen> {
                     content: Text('Addiction cannot be empty'),
                   ),
                 );
-                _validationErrorBool = true;
+                isProperlyValidated = true;
               }
 
-              if (!_validationErrorBool) {
+              if (!isProperlyValidated) {
                 WidgetsFlutterBinding.ensureInitialized();
                 final database = openDatabase(
-                  join(await getDatabasesPath(), '_soberity_database.db'),
+                  join(await getDatabasesPath(), 'soberity_database.db'),
                   onCreate: _createTable,
                   version: 1,
                 );
